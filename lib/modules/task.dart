@@ -1,8 +1,11 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo/shared/components.dart';
-import 'package:todo/shared/consistant.dart';
+
+import 'package:todo/shared/cubit/cubit.dart';
+import 'package:todo/shared/cubit/states.dart';
 
 class Task extends StatefulWidget {
   Task({super.key});
@@ -13,18 +16,15 @@ class Task extends StatefulWidget {
 
 class _TaskState extends State<Task> {
   // bool checked = false;
+
+  late DismissDirectionCallback onDismissed;
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        itemBuilder: (context, index) => buildTaskItems(
-              tasks[index],
-            ),
-        separatorBuilder: (context, index) => Divider(
-              height: 5,
-              indent: 20,
-              endIndent: 10,
-              color: Colors.grey[400],
-            ),
-        itemCount: tasks.length);
+    return BlocConsumer<AppCubit, AppStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          var tasks = AppCubit.get(context).newTasks;
+          return buildConditionIFNoDatabase(tasks: tasks);
+        });
   }
 }
